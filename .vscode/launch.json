@@ -9,7 +9,7 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "/Users/zlk/Documents/GitHub/PixelServer/src/server/main.go",
+            "program": "E:\\gitHub\\PixelFarm\\PixelServer\\src\\server\\main.go",
             "env": {},
             "args": []
         }
