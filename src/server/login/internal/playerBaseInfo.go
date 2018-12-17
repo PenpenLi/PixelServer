@@ -1,6 +1,7 @@
 package internal
 
+// PlayerBaseInfo .
 type PlayerBaseInfo struct {
-	PlayerID uint32
+	PlayerID string
 	Name     string
 }

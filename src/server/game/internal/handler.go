@@ -2,13 +2,14 @@ package internal
 
 import (
 	"reflect"
+	"server/msg"
 
 	"github.com/name5566/leaf/log"
 )
 
 func init() {
 	log.Debug("game init")
-	// handler(&msg.SearchRequest{}, handleHello)
+	handler(&msg.LoginRequest{}, handleHello)
 }
 
 func handler(m interface{}, h interface{}) {

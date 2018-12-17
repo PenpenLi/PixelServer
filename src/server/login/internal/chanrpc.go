@@ -2,16 +2,17 @@ package internal
 
 import (
 	"fmt"
+
 	"github.com/name5566/leaf/gate"
 )
 
 func init() {
-	skeleton.RegisterChanRPC("NewAgent", rpcNewAgent)
+	skeleton.RegisterChanRPC("Login_Login", rpcLogin)
 	skeleton.RegisterChanRPC("CloseAgent", rpcCloseAgent)
 }
 
-func rpcNewAgent(args []interface{}) {
-	fmt.Println("create agent")
+func rpcLogin(args []interface{}) {
+	fmt.Println("login request")
 	a := args[0].(gate.Agent)
 	_ = a
 }

@@ -20,10 +20,60 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+type LoginResponse_LoginResponseCode int32
+
+const (
+	LoginResponse_FAIL    LoginResponse_LoginResponseCode = 0
+	LoginResponse_SUCCESS LoginResponse_LoginResponseCode = 1
+)
+
+var LoginResponse_LoginResponseCode_name = map[int32]string{
+	0: "FAIL",
+	1: "SUCCESS",
+}
+
+var LoginResponse_LoginResponseCode_value = map[string]int32{
+	"FAIL":    0,
+	"SUCCESS": 1,
+}
+
+func (x LoginResponse_LoginResponseCode) String() string {
+	return proto.EnumName(LoginResponse_LoginResponseCode_name, int32(x))
+}
+
+func (LoginResponse_LoginResponseCode) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_ae7144eb6e0a1cde, []int{1, 0}
+}
+
+type RegisteResponse_RegisteResponseCode int32
+
+const (
+	RegisteResponse_FAIL    RegisteResponse_RegisteResponseCode = 0
+	RegisteResponse_SUCCESS RegisteResponse_RegisteResponseCode = 1
+)
+
+var RegisteResponse_RegisteResponseCode_name = map[int32]string{
+	0: "FAIL",
+	1: "SUCCESS",
+}
+
+var RegisteResponse_RegisteResponseCode_value = map[string]int32{
+	"FAIL":    0,
+	"SUCCESS": 1,
+}
+
+func (x RegisteResponse_RegisteResponseCode) String() string {
+	return proto.EnumName(RegisteResponse_RegisteResponseCode_name, int32(x))
+}
+
+func (RegisteResponse_RegisteResponseCode) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_ae7144eb6e0a1cde, []int{3, 0}
+}
+
+// 登录
 type LoginRequest struct {
-	Id                   int32    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Email                string   `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
+	Account              string   `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
+	Password             string   `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -54,32 +104,26 @@ func (m *LoginRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_LoginRequest proto.InternalMessageInfo
 
-func (m *LoginRequest) GetId() int32 {
+func (m *LoginRequest) GetAccount() string {
 	if m != nil {
-		return m.Id
-	}
-	return 0
-}
-
-func (m *LoginRequest) GetName() string {
-	if m != nil {
-		return m.Name
+		return m.Account
 	}
 	return ""
 }
 
-func (m *LoginRequest) GetEmail() string {
+func (m *LoginRequest) GetPassword() string {
 	if m != nil {
-		return m.Email
+		return m.Password
 	}
 	return ""
 }
 
 type LoginResponse struct {
-	Id                   int32    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Code                 LoginResponse_LoginResponseCode `protobuf:"varint,1,opt,name=code,proto3,enum=msg.LoginResponse_LoginResponseCode" json:"code,omitempty"`
+	Uid                  string                          `protobuf:"bytes,2,opt,name=uid,proto3" json:"uid,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                        `json:"-"`
+	XXX_unrecognized     []byte                          `json:"-"`
+	XXX_sizecache        int32                           `json:"-"`
 }
 
 func (m *LoginResponse) Reset()         { *m = LoginResponse{} }
@@ -107,28 +151,141 @@ func (m *LoginResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_LoginResponse proto.InternalMessageInfo
 
-func (m *LoginResponse) GetId() int32 {
+func (m *LoginResponse) GetCode() LoginResponse_LoginResponseCode {
 	if m != nil {
-		return m.Id
+		return m.Code
 	}
-	return 0
+	return LoginResponse_FAIL
+}
+
+func (m *LoginResponse) GetUid() string {
+	if m != nil {
+		return m.Uid
+	}
+	return ""
+}
+
+// 注册
+type RegisteRequest struct {
+	Account              string   `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
+	Password             string   `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *RegisteRequest) Reset()         { *m = RegisteRequest{} }
+func (m *RegisteRequest) String() string { return proto.CompactTextString(m) }
+func (*RegisteRequest) ProtoMessage()    {}
+func (*RegisteRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ae7144eb6e0a1cde, []int{2}
+}
+
+func (m *RegisteRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_RegisteRequest.Unmarshal(m, b)
+}
+func (m *RegisteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_RegisteRequest.Marshal(b, m, deterministic)
+}
+func (m *RegisteRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RegisteRequest.Merge(m, src)
+}
+func (m *RegisteRequest) XXX_Size() int {
+	return xxx_messageInfo_RegisteRequest.Size(m)
+}
+func (m *RegisteRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_RegisteRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RegisteRequest proto.InternalMessageInfo
+
+func (m *RegisteRequest) GetAccount() string {
+	if m != nil {
+		return m.Account
+	}
+	return ""
+}
+
+func (m *RegisteRequest) GetPassword() string {
+	if m != nil {
+		return m.Password
+	}
+	return ""
+}
+
+type RegisteResponse struct {
+	Code                 RegisteResponse_RegisteResponseCode `protobuf:"varint,1,opt,name=code,proto3,enum=msg.RegisteResponse_RegisteResponseCode" json:"code,omitempty"`
+	Uid                  string                              `protobuf:"bytes,2,opt,name=uid,proto3" json:"uid,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                            `json:"-"`
+	XXX_unrecognized     []byte                              `json:"-"`
+	XXX_sizecache        int32                               `json:"-"`
+}
+
+func (m *RegisteResponse) Reset()         { *m = RegisteResponse{} }
+func (m *RegisteResponse) String() string { return proto.CompactTextString(m) }
+func (*RegisteResponse) ProtoMessage()    {}
+func (*RegisteResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ae7144eb6e0a1cde, []int{3}
+}
+
+func (m *RegisteResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_RegisteResponse.Unmarshal(m, b)
+}
+func (m *RegisteResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_RegisteResponse.Marshal(b, m, deterministic)
+}
+func (m *RegisteResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RegisteResponse.Merge(m, src)
+}
+func (m *RegisteResponse) XXX_Size() int {
+	return xxx_messageInfo_RegisteResponse.Size(m)
+}
+func (m *RegisteResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_RegisteResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RegisteResponse proto.InternalMessageInfo
+
+func (m *RegisteResponse) GetCode() RegisteResponse_RegisteResponseCode {
+	if m != nil {
+		return m.Code
+	}
+	return RegisteResponse_FAIL
+}
+
+func (m *RegisteResponse) GetUid() string {
+	if m != nil {
+		return m.Uid
+	}
+	return ""
 }
 
 func init() {
+	proto.RegisterEnum("msg.LoginResponse_LoginResponseCode", LoginResponse_LoginResponseCode_name, LoginResponse_LoginResponseCode_value)
+	proto.RegisterEnum("msg.RegisteResponse_RegisteResponseCode", RegisteResponse_RegisteResponseCode_name, RegisteResponse_RegisteResponseCode_value)
 	proto.RegisterType((*LoginRequest)(nil), "msg.LoginRequest")
 	proto.RegisterType((*LoginResponse)(nil), "msg.LoginResponse")
+	proto.RegisterType((*RegisteRequest)(nil), "msg.RegisteRequest")
+	proto.RegisterType((*RegisteResponse)(nil), "msg.RegisteResponse")
 }
 
 func init() { proto.RegisterFile("src/login.proto", fileDescriptor_ae7144eb6e0a1cde) }
 
 var fileDescriptor_ae7144eb6e0a1cde = []byte{
-	// 127 bytes of a gzipped FileDescriptorProto
+	// 227 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2f, 0x2e, 0x4a, 0xd6,
 	0xcf, 0xc9, 0x4f, 0xcf, 0xcc, 0xd3, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0xce, 0x2d, 0x4e,
-	0x57, 0xf2, 0xe0, 0xe2, 0xf1, 0x01, 0x89, 0x05, 0xa5, 0x16, 0x96, 0xa6, 0x16, 0x97, 0x08, 0xf1,
-	0x71, 0x31, 0x65, 0xa6, 0x48, 0x30, 0x2a, 0x30, 0x6a, 0xb0, 0x06, 0x31, 0x65, 0xa6, 0x08, 0x09,
-	0x71, 0xb1, 0xe4, 0x25, 0xe6, 0xa6, 0x4a, 0x30, 0x29, 0x30, 0x6a, 0x70, 0x06, 0x81, 0xd9, 0x42,
-	0x22, 0x5c, 0xac, 0xa9, 0xb9, 0x89, 0x99, 0x39, 0x12, 0xcc, 0x60, 0x41, 0x08, 0x47, 0x49, 0x9e,
-	0x8b, 0x17, 0x6a, 0x52, 0x71, 0x41, 0x7e, 0x5e, 0x71, 0x2a, 0xba, 0x51, 0x49, 0x6c, 0x60, 0x6b,
-	0x8d, 0x01, 0x01, 0x00, 0x00, 0xff, 0xff, 0x28, 0x2f, 0x54, 0xc4, 0x89, 0x00, 0x00, 0x00,
+	0x57, 0x72, 0xe1, 0xe2, 0xf1, 0x01, 0x89, 0x05, 0xa5, 0x16, 0x96, 0xa6, 0x16, 0x97, 0x08, 0x49,
+	0x70, 0xb1, 0x27, 0x26, 0x27, 0xe7, 0x97, 0xe6, 0x95, 0x48, 0x30, 0x2a, 0x30, 0x6a, 0x70, 0x06,
+	0xc1, 0xb8, 0x42, 0x52, 0x5c, 0x1c, 0x05, 0x89, 0xc5, 0xc5, 0xe5, 0xf9, 0x45, 0x29, 0x12, 0x4c,
+	0x60, 0x29, 0x38, 0x5f, 0xa9, 0x9d, 0x91, 0x8b, 0x17, 0x6a, 0x4c, 0x71, 0x41, 0x7e, 0x5e, 0x71,
+	0xaa, 0x90, 0x05, 0x17, 0x4b, 0x72, 0x7e, 0x4a, 0x2a, 0xd8, 0x10, 0x3e, 0x23, 0x15, 0xbd, 0xdc,
+	0xe2, 0x74, 0x3d, 0x14, 0x15, 0xa8, 0x3c, 0xe7, 0xfc, 0x94, 0xd4, 0x20, 0xb0, 0x0e, 0x21, 0x01,
+	0x2e, 0xe6, 0xd2, 0x4c, 0x98, 0x15, 0x20, 0xa6, 0x92, 0x16, 0x97, 0x20, 0x86, 0x62, 0x21, 0x0e,
+	0x2e, 0x16, 0x37, 0x47, 0x4f, 0x1f, 0x01, 0x06, 0x21, 0x6e, 0x2e, 0xf6, 0xe0, 0x50, 0x67, 0x67,
+	0xd7, 0xe0, 0x60, 0x01, 0x46, 0x25, 0x37, 0x2e, 0xbe, 0xa0, 0xd4, 0xf4, 0xcc, 0xe2, 0x92, 0x54,
+	0xca, 0x7c, 0xd4, 0xcf, 0xc8, 0xc5, 0x0f, 0x37, 0x08, 0xea, 0x27, 0x1b, 0x14, 0x3f, 0x69, 0x80,
+	0xfd, 0x84, 0xa6, 0x06, 0x9d, 0x8f, 0xd7, 0x5f, 0x3a, 0x5c, 0xc2, 0x58, 0x94, 0xe3, 0xf0, 0x59,
+	0x12, 0x1b, 0x38, 0xd6, 0x8c, 0x01, 0x01, 0x00, 0x00, 0xff, 0xff, 0x2f, 0xe2, 0x65, 0x68, 0xc8,
+	0x01, 0x00, 0x00,
 }
