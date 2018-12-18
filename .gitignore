@@ -10,3 +10,20 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+src/github.com/derekparker/delve/
+src/github.com/golang/lint/
+src/github.com/golang/protobuf/
+src/github.com/golang/tools/
+src/github.com/gorilla/websocket/
+src/github.com/lukehoban/go-find-references/
+src/github.com/lukehoban/go-outline/
+src/github.com/lukehoban/ident/
+src/sourcegraph.com/sqs/goreturns/
+src/golang.org/x/tools/
+src/gopkg.in/mgo.v2/
+src/github.com/tpng/gopkgs/
+src/golang.org/x/lint/
+src/github.com/rogpeppe/godef/
+src/github.com/nsf/gocode/
+src/github.com/newhook/go-symbols/
+src/github.com/sqs/goreturns/
