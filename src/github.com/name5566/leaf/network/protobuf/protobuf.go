@@ -4,11 +4,12 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"math"
+	"reflect"
+
 	"github.com/golang/protobuf/proto"
 	"github.com/name5566/leaf/chanrpc"
 	"github.com/name5566/leaf/log"
-	"math"
-	"reflect"
 )
 
 // -------------------------
@@ -16,7 +17,7 @@ import (
 // -------------------------
 type Processor struct {
 	littleEndian bool
-	msgInfo      []*MsgInfo
+	msgInfo      map[uint16]*MsgInfo
 	msgID        map[reflect.Type]uint16
 }
 
@@ -37,6 +38,7 @@ type MsgRaw struct {
 func NewProcessor() *Processor {
 	p := new(Processor)
 	p.littleEndian = false
+	p.msgInfo = make(map[uint16]*MsgInfo)
 	p.msgID = make(map[reflect.Type]uint16)
 	return p
 }
@@ -47,7 +49,7 @@ func (p *Processor) SetByteOrder(littleEndian bool) {
 }
 
 // It's dangerous to call the method on routing or marshaling (unmarshaling)
-func (p *Processor) Register(msg proto.Message) uint16 {
+func (p *Processor) Register(id uint16, msg proto.Message) uint16 {
 	msgType := reflect.TypeOf(msg)
 	if msgType == nil || msgType.Kind() != reflect.Ptr {
 		log.Fatal("protobuf message pointer required")
@@ -61,8 +63,7 @@ func (p *Processor) Register(msg proto.Message) uint16 {
 
 	i := new(MsgInfo)
 	i.msgType = msgType
-	p.msgInfo = append(p.msgInfo, i)
-	id := uint16(len(p.msgInfo) - 1)
+	p.msgInfo[id] = i
 	p.msgID[msgType] = id
 	return id
 }
@@ -91,21 +92,22 @@ func (p *Processor) SetHandler(msg proto.Message, msgHandler MsgHandler) {
 
 // It's dangerous to call the method on routing or marshaling (unmarshaling)
 func (p *Processor) SetRawHandler(id uint16, msgRawHandler MsgHandler) {
-	if id >= uint16(len(p.msgInfo)) {
+	i, ok := p.msgInfo[id]
+	if !ok {
 		log.Fatal("message id %v not registered", id)
 	}
 
-	p.msgInfo[id].msgRawHandler = msgRawHandler
+	i.msgRawHandler = msgRawHandler
 }
 
 // goroutine safe
 func (p *Processor) Route(msg interface{}, userData interface{}) error {
 	// raw
 	if msgRaw, ok := msg.(MsgRaw); ok {
-		if msgRaw.msgID >= uint16(len(p.msgInfo)) {
+		i, ok := p.msgInfo[msgRaw.msgID]
+		if !ok {
 			return fmt.Errorf("message id %v not registered", msgRaw.msgID)
 		}
-		i := p.msgInfo[msgRaw.msgID]
 		if i.msgRawHandler != nil {
 			i.msgRawHandler([]interface{}{msgRaw.msgID, msgRaw.msgRawData, userData})
 		}
@@ -141,12 +143,12 @@ func (p *Processor) Unmarshal(data []byte) (interface{}, error) {
 	} else {
 		id = binary.BigEndian.Uint16(data)
 	}
-	if id >= uint16(len(p.msgInfo)) {
-		return nil, fmt.Errorf("message id %v not registered", id)
-	}
 
 	// msg
-	i := p.msgInfo[id]
+	i, ok := p.msgInfo[id]
+	if !ok {
+		return nil, fmt.Errorf("message id %v not registered", id)
+	}
 	if i.msgRawHandler != nil {
 		return MsgRaw{id, data[2:]}, nil
 	} else {
