@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	log.Debug("game init")
+	log.Debug("[game init]")
 	handler(&msg.LoginRequest{}, handleHello)
 }
 
