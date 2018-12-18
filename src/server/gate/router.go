@@ -7,4 +7,5 @@ import (
 
 func init() {
 	msg.Processor.SetRouter(&msg.LoginRequest{}, login.ChanRPC)
+	msg.Processor.SetRouter(&msg.RegisteRequest{}, login.ChanRPC)
 }
