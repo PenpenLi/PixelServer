@@ -27,3 +27,4 @@ src/github.com/rogpeppe/godef/
 src/github.com/nsf/gocode/
 src/github.com/newhook/go-symbols/
 src/github.com/sqs/goreturns/
+src/github.com/go-sql-driver/mysql/
