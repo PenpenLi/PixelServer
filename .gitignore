@@ -36,3 +36,4 @@ src/github.com/pkg/errors/
 src/github.com/ramya-rao-a/go-outline/
 src/github.com/stamblerre/gocode/
 src/github.com/uudashr/gopkgs/
+src/server/debug
