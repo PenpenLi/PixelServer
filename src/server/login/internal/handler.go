@@ -32,7 +32,7 @@ func handleAuth(args []interface{}) {
 	log.Debug("[login handleAuth] accountd = " + m.GetAccount() + " password = " + m.GetPassword())
 
 	var uid string
-	if strings.Count(m.GetPassword(), "") > 0 {
+	if strings.Count(m.GetPassword(), "")-1 > 0 {
 		row := db.QueryRow("SELECT uid FROM pixel_user WHERE account=? and password = ?", m.GetAccount(), m.GetPassword())
 		if row != nil {
 			row.Scan(&uid)
@@ -47,12 +47,12 @@ func handleAuth(args []interface{}) {
 	log.Debug("[login handleAuth] uid = " + uid)
 	if strings.Count(uid, "")-1 > 0 {
 		a.WriteMsg(&msg.LoginResponse{
-			Code: msg.LoginResponse_SUCCESS,
+			Code: msg.ResponseCode_SUCCESS,
 			Uid:  uid,
 		})
 	} else {
 		a.WriteMsg(&msg.LoginResponse{
-			Code: msg.LoginResponse_FAIL,
+			Code: msg.ResponseCode_FAIL,
 			Err: &msg.Error{
 				Code: 100,
 				Msg:  "用户不存在",
@@ -101,7 +101,7 @@ func handleRegiste(args []interface{}) {
 
 	if strings.Count(uid, "")-1 > 0 {
 		a.WriteMsg(&msg.RegisteResponse{
-			Code: msg.RegisteResponse_FAIL,
+			Code: msg.ResponseCode_FAIL,
 			Err: &msg.Error{
 				Code: 101,
 				Msg:  "用户已存在",
@@ -120,7 +120,7 @@ func handleRegiste(args []interface{}) {
 		checkErr(err3)
 
 		a.WriteMsg(&msg.RegisteResponse{
-			Code: msg.RegisteResponse_SUCCESS,
+			Code: msg.ResponseCode_SUCCESS,
 			Uid:  uid,
 		})
 	}
